@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Header Analyzer</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --success: #2ecc71;
+            --warning: #f1c40f;
+            --danger: #e74c3c;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --card-bg: #ffffff;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; color: var(--dark); line-height: 1.6; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .main-header { text-align: center; margin-bottom: 30px; }
+        .main-header h1 { color: var(--dark); }
+        .main-header p { color: #7f8c8d; font-size: 1.1em; }
+        .input-section { display: flex; flex-direction: column; }
+        #headerInput { width: 100%; box-sizing: border-box; min-height: 200px; border-radius: 5px; border: 1px solid #ccc; padding: 15px; font-family: 'Courier New', Courier, monospace; font-size: 14px; margin-bottom: 15px; resize: vertical; }
+        .analyzing { text-align: center; font-size: 1.2em; color: var(--primary); padding: 20px; }
+        .card { background: var(--card-bg); border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); padding: 20px; margin-bottom: 20px; border: 1px solid #e1e4e8; }
+        .summary-card { text-align: center; border-top: 4px solid var(--primary); }
+        .summary-card.risk-high { border-top-color: var(--danger); }
+        .summary-card.risk-medium { border-top-color: var(--warning); }
+        .summary-card.risk-low { border-top-color: var(--success); }
+        .risk-badge { display: inline-block; padding: 5px 15px; border-radius: 20px; color: white; font-weight: bold; margin: 10px 0; }
+        .risk-high .risk-badge { background: var(--danger); }
+        .risk-medium .risk-badge { background: var(--warning); }
+        .risk-low .risk-badge { background: var(--success); }
+        .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .details-grid h3 { border-bottom: 2px solid var(--light); padding-bottom: 10px; margin-top: 0; color: var(--dark); font-size: 1.1em; }
+        .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #eee; }
+        .info-label { font-weight: 600; color: #7f8c8d; }
+        .info-value { font-family: monospace; color: var(--dark); text-align: right; word-break: break-all; margin-left: 10px; }
+        .status-pass { color: var(--success); font-weight: bold; }
+        .status-fail { color: var(--danger); font-weight: bold; }
+        .status-neutral, .status-not-found { color: #95a5a6; font-style: italic; }
+        .suspicious-list { list-style: none; padding: 0; }
+        .suspicious-list li { color: var(--danger); padding: 5px 0; display: flex; align-items: center; }
+        .suspicious-list li::before { content: '⚠️'; margin-right: 10px; }
+        .error-card { border-left: 4px solid var(--danger); color: var(--danger); }
+        button { background-color: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-size: 1em; font-weight: 500; transition: background-color 0.3s ease; align-self: flex-end; }
+        button:hover { background-color: #2980b9; }
+        #exportBtn { background-color: var(--dark); align-self: center; }
+        #exportBtn:hover { background-color: #34495e; }
+        .main-footer { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--light); color: #7f8c8d; font-size: 0.9em; }
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="main-header">
+            <h1>Email Header Analyzer</h1>
+            <p>Paste a raw email header below to analyze it for potential security risks.</p>
+        </header>
+        <main>
+            <section class="card input-section">
+                <label for="headerInput" class="sr-only">Paste raw email header here</label>
+                <textarea id="headerInput" placeholder="Received: from mail-sor-f69.google.com (mail-sor-f69.google.com [209.85.220.69]) by ..."></textarea>
+                <button id="analyzeBtn" type="button">Analyze Header</button>
+            </section>
+            <section id="results" class="results-section">
+                <!-- Results will be dynamically inserted here -->
+            </section>
+        </main>
+        <footer class="main-footer">
+            <p>&copy; 2024 Email Analyzer Tool. For educational purposes only.</p>
+        </footer>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
